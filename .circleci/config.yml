@@ -1,0 +1,23 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@3.0.0
+jobs:
+  build:
+    working_directory: ~/real-world-vue
+    # Reuse Docker container specification
+    executor: node/default
+    steps:
+      - checkout
+      # Install the latest npm
+      - node/install-npm
+      # Install depedencies
+      - node/install-packages:
+          app-dir: ~/real-world-vue
+          cache-path: node_modules
+          override-ci-command: npm i
+      # No application is added on testing, so
+      # I make tests run in a build process, not in a differenct process.
+      - run:
+          name: Test
+          command: npm run test:unit
